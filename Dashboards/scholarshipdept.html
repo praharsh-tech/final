@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Scholarship Department | NIT Polytechnic</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100 flex min-h-screen">
+
+<!-- SIDEBAR -->
+
+<aside class="w-64 bg-gradient-to-b from-purple-700 to-indigo-700 text-white p-6 space-y-6">
+
+<h2 class="text-2xl font-bold">Scholarship Dept</h2>
+
+<nav class="space-y-3">
+
+<button id="navDashboard" class="w-full text-left hover:bg-purple-600 p-2 rounded">
+🏠 Dashboard
+</button>
+
+<button id="navTasks" class="w-full text-left hover:bg-purple-600 p-2 rounded">
+📥 Tasks From Principal
+</button>
+
+</nav>
+
+<button id="logoutBtn"
+class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded w-full mt-10">
+Logout
+</button>
+
+</aside>
+
+<div class="flex-1 flex flex-col">
+
+<header class="bg-white shadow px-8 py-4 flex justify-between">
+
+<h1 class="text-xl font-bold text-purple-700">
+Scholarship Department
+</h1>
+
+<p id="scholarHeader"></p>
+
+</header>
+
+<main class="p-8 space-y-8">
+
+<section id="dashboardSection">
+
+<div class="grid md:grid-cols-3 gap-6">
+
+<div class="bg-white shadow p-6 rounded-xl">
+<p>Total Tasks</p>
+<h3 id="totalTasks" class="text-3xl font-bold">0</h3>
+</div>
+
+<div class="bg-white shadow p-6 rounded-xl">
+<p>Completed</p>
+<h3 id="completedTasks" class="text-3xl font-bold text-green-600">0</h3>
+</div>
+
+<div class="bg-white shadow p-6 rounded-xl">
+<p>Pending</p>
+<h3 id="pendingTasks" class="text-3xl font-bold text-orange-500">0</h3>
+</div>
+
+</div>
+
+</section>
+
+<section id="tasksSection" class="hidden">
+
+<h2 class="text-xl font-semibold text-purple-700 mb-4">
+Tasks Assigned By Principal
+</h2>
+
+<div id="scholarTasks" class="grid md:grid-cols-2 gap-5"></div>
+
+</section>
+
+</main>
+
+</div>
+
+<script>
+
+function showSection(section){
+
+const sections=["dashboardSection","tasksSection"];
+
+sections.forEach(id=>{
+document.getElementById(id).classList.add("hidden");
+});
+
+document.getElementById(section).classList.remove("hidden");
+
+}
+
+document.getElementById("navDashboard").onclick=
+()=>showSection("dashboardSection");
+
+document.getElementById("navTasks").onclick=
+()=>showSection("tasksSection");
+
+</script>
+
+<script type="module" src="scholarship.js"></script>
+
+</body>
+</html>

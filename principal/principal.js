@@ -3,6 +3,7 @@ import { renderTasks } from "../components/renderTasks.js";
 import { setupTaskActions } from "../components/taskActions.js";
 import { setupFilters } from "../components/filters.js";
 import { loadHodPerformance, loadFacultyPerformance } from "../components/performance.js";
+import { loadDashboardStats } from "../components/dashboardStats.js";
 
 /************************************************
  PAGE PROTECTION
@@ -177,3 +178,4 @@ setupTaskActions();
 setupFilters();
 loadHodPerformance();
 loadFacultyPerformance();
+loadDashboardStats()

@@ -246,4 +246,23 @@ export const users = [
     dept:"Science",
     role:"faculty",
     pfp:"https://via.placeholder.com/150"
-    },]
+    },
+    
+   {
+id:40,
+name:"Accounts Department",
+username:"accounts",
+password:"1234",
+role:"accounts",
+dept:"Accounts"
+},
+
+{
+id:41,
+name:"Scholarship Department",
+username:"scholarship",
+password:"1234",
+role:"scholarship",
+dept:"Scholarship"
+}
+]

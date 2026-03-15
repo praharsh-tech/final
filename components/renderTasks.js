@@ -17,50 +17,84 @@ export function renderTasks(taskArray){
     
     div.className = "bg-white p-5 rounded-xl shadow";
     
-    div.innerHTML = `
-    
-    <h3 class="text-lg font-semibold text-blue-700">${task.title}</h3>
-    
-    <p class="text-sm text-gray-600 mt-1">${task.description}</p>
-    
-    <div class="mt-2 text-sm space-y-1">
-    
-    <p><strong>Nature:</strong> ${task.nature}</p>
-    
-    <p><strong>Deadline:</strong> ${task.deadline}</p>
-    
-    <p><strong>Status:</strong> ${task.status}</p>
-    
-    <p><strong>Assigned To:</strong> ${task.assignedTo.join(", ")}</p>
-    
-    <p><strong>Support:</strong> ${task.support || "-"}</p>
-    
-    ${task.file ? `
-    <a href="${task.file}" download
-    class="text-blue-600 underline text-sm block">
-    Download Task Attachment
-    </a>
-    ` : ""}
-    
-    </div>
-    
-    <div class="flex gap-3 mt-4">
-    
-    <button
-    class="editTaskBtn bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded"
-    data-id="${task.id}">
-    Edit
-    </button>
-    
-    <button
-    class="deleteTaskBtn bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-    data-id="${task.id}">
-    Delete
-    </button>
-    
-    </div>
-    
-    `;
+    div.innerHTML = div.innerHTML = `
+
+<div class="taskCard space-y-3">
+
+<h3 class="text-lg font-semibold text-blue-700">
+${task.title}
+</h3>
+
+<p class="text-gray-600 text-sm">
+${task.description}
+</p>
+
+<div class="flex justify-between text-sm">
+
+<p>
+<strong>Deadline:</strong> ${task.deadline}
+</p>
+
+<p class="text-red-500">
+Time Left:
+<span class="taskTimer" data-deadline="${task.deadline}"></span>
+</p>
+
+</div>
+
+<div class="flex items-center justify-between">
+
+<span class="px-3 py-1 text-xs rounded-full
+${task.status==="Completed" ? "bg-green-100 text-green-700" :
+task.status==="Processing" ? "bg-blue-100 text-blue-700" :
+task.status==="Late" ? "bg-yellow-100 text-yellow-700" :
+task.status==="Failed" ? "bg-red-100 text-red-700" :
+"bg-gray-100 text-gray-700"}">
+
+${task.status}
+
+</span>
+
+</div>
+
+<select
+class="hodStatusSelect border rounded p-2 w-full mt-2"
+data-id="${task.id}">
+
+<option value="Pending" ${task.status==="Pending"?"selected":""}>
+Pending
+</option>
+
+<option value="Processing" ${task.status==="Processing"?"selected":""}>
+Processing
+</option>
+
+<option value="Completed">
+Completed
+</option>
+
+</select>
+
+<textarea
+class="hodReply border rounded p-2 w-full mt-2"
+data-id="${task.id}"
+placeholder="Write response to Principal...">${task.hodReply || ""}</textarea>
+
+<input
+type="file"
+class="hodFile border rounded p-2 w-full mt-2"
+data-id="${task.id}">
+
+<button
+class="submitTaskBtn hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded mt-3 w-full"
+data-id="${task.id}">
+
+Submit Task
+
+</button>
+
+</div>
+`;
     
     taskList.appendChild(div);
     

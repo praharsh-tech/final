@@ -76,30 +76,36 @@ Logout
 Dashboard Overview
 </h2>
 
-<div class="grid md:grid-cols-3 gap-6">
+<div class="grid md:grid-cols-5 gap-6">
 
+<!-- TOTAL -->
 <div class="bg-white shadow rounded-xl p-6">
-
 <p class="text-gray-500">Total Tasks</p>
-
 <h3 id="totalTasks" class="text-3xl font-bold">0</h3>
-
 </div>
 
+<!-- COMPLETED -->
 <div class="bg-white shadow rounded-xl p-6">
-
 <p class="text-gray-500">Completed</p>
-
 <h3 id="completedTasks" class="text-3xl font-bold text-green-600">0</h3>
-
 </div>
 
+<!-- PENDING -->
 <div class="bg-white shadow rounded-xl p-6">
-
 <p class="text-gray-500">Pending</p>
+<h3 id="pendingTasks" class="text-3xl font-bold text-yellow-600">0</h3>
+</div>
 
-<h3 id="pendingTasks" class="text-3xl font-bold text-red-600">0</h3>
+<!-- LATE -->
+<div class="bg-white shadow rounded-xl p-6">
+<p class="text-gray-500">Late</p>
+<h3 id="lateTasks" class="text-3xl font-bold text-orange-500">0</h3>
+</div>
 
+<!-- FAILED -->
+<div class="bg-white shadow rounded-xl p-6">
+<p class="text-gray-500">Failed</p>
+<h3 id="failedTasks" class="text-3xl font-bold text-red-600">0</h3>
 </div>
 
 </div>

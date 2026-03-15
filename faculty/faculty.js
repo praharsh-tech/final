@@ -1,32 +1,30 @@
-import { users } from "../Data/Database.js";
-
 /************************************************
-🔐 PAGE PROTECTION
+PAGE PROTECTION
 ************************************************/
 
-const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+const user = JSON.parse(localStorage.getItem("loggedInUser"));
 
-if (!loggedInUser || loggedInUser.role !== "faculty") {
-  window.location.href = "../index.html";
+if(!user || user.role !== "faculty"){
+window.location.href="../index.html";
 }
 
 /************************************************
-👤 LOAD FACULTY PROFILE
+PROFILE
 ************************************************/
 
 document.getElementById("facultyHeader").textContent =
-`${loggedInUser.name} (${loggedInUser.dept})`;
+`${user.name} (${user.dept})`;
 
-document.getElementById("facultyName").textContent = loggedInUser.name;
-document.getElementById("facultyDept").textContent = loggedInUser.dept;
-document.getElementById("facultyEmail").textContent = loggedInUser.email;
-document.getElementById("facultyPhone").textContent = loggedInUser.phone;
+document.getElementById("facultyName").textContent = user.name;
+document.getElementById("facultyDept").textContent = user.dept;
+document.getElementById("facultyEmail").textContent = user.email;
+document.getElementById("facultyPhone").textContent = user.phone;
 
 document.getElementById("facultyImage").src =
-loggedInUser.pfp || "https://via.placeholder.com/120";
+user.pfp || "https://via.placeholder.com/120";
 
 /************************************************
-🗂 TASK STORAGE
+STORAGE
 ************************************************/
 
 function getTasks(){
@@ -34,19 +32,19 @@ return JSON.parse(localStorage.getItem("tasks")) || [];
 }
 
 function saveTasks(tasks){
-localStorage.setItem("tasks", JSON.stringify(tasks));
+localStorage.setItem("tasks",JSON.stringify(tasks));
 }
 
 /************************************************
-📋 LOAD FACULTY TASKS
+LOAD TASKS
 ************************************************/
 
 function loadFacultyTasks(){
 
 const tasks = getTasks();
 
-const facultyTasks = tasks.filter(task =>
-task.assignedTo.includes(loggedInUser.username)
+const facultyTasks = tasks.filter(t =>
+t.assignedTo.includes(user.username)
 );
 
 renderTasks(facultyTasks);
@@ -55,38 +53,32 @@ updateDashboard(facultyTasks);
 }
 
 /************************************************
-📊 DASHBOARD COUNTS
+DASHBOARD
 ************************************************/
 
 function updateDashboard(tasks){
 
-const total = tasks.length;
+document.getElementById("totalTasks").textContent = tasks.length;
 
-const completed = tasks.filter(
-t => t.status === "Completed"
-).length;
+document.getElementById("completedTasks").textContent =
+tasks.filter(t=>t.status==="Completed").length;
 
-const pending = tasks.filter(
-t => t.status !== "Completed"
-).length;
-
-document.getElementById("totalTasks").textContent = total;
-document.getElementById("completedTasks").textContent = completed;
-document.getElementById("pendingTasks").textContent = pending;
+document.getElementById("pendingTasks").textContent =
+tasks.filter(t=>t.status!=="Completed").length;
 
 }
 
 /************************************************
-📋 RENDER TASKS
+RENDER TASKS
 ************************************************/
 
 function renderTasks(tasks){
 
 const container = document.getElementById("facultyTasks");
 
-container.innerHTML = "";
+container.innerHTML="";
 
-if(tasks.length === 0){
+if(tasks.length===0){
 
 container.innerHTML =
 "<p class='text-gray-500'>No tasks assigned</p>";
@@ -97,17 +89,19 @@ return;
 
 tasks.forEach(task=>{
 
-const div = document.createElement("div");
+const locked = task.locked;
 
-div.className="bg-white p-5 rounded-xl shadow";
+const div=document.createElement("div");
 
-div.innerHTML = `
+div.className="bg-white p-6 rounded-xl shadow";
 
-<h3 class="text-lg font-semibold text-blue-700">
+div.innerHTML=`
+
+<h3 class="text-lg font-semibold text-indigo-700">
 ${task.title}
 </h3>
 
-<p class="text-sm text-gray-600 mt-1">
+<p class="text-sm text-gray-600">
 ${task.description}
 </p>
 
@@ -115,23 +109,14 @@ ${task.description}
 <strong>Deadline:</strong> ${task.deadline}
 </p>
 
-<p class="text-sm">
-<strong>Status:</strong> ${task.status}
-</p>
-
-${task.file ? `
-<a href="${task.file}" download
-class="text-blue-600 underline text-sm block mt-2">
-Download Attachment
-</a>
-` : ""}
-
-<label class="block text-sm mt-3 font-medium">
-Update Status
+<label class="text-sm mt-3 block font-medium">
+Status
 </label>
 
-<select class="statusSelect border rounded p-2 w-full mt-1"
-data-id="${task.id}">
+<select
+class="statusSelect border rounded p-2 w-full"
+data-id="${task.id}"
+${locked?"disabled":""}>
 
 <option value="Pending" ${task.status==="Pending"?"selected":""}>
 Pending
@@ -147,37 +132,43 @@ Completed
 
 </select>
 
-<label class="block text-sm mt-3 font-medium">
-Reply to HOD
+<label class="text-sm mt-3 block font-medium">
+Reply
 </label>
 
 <textarea
-class="replyBox border rounded p-2 w-full mt-1"
+class="replyBox border rounded p-2 w-full"
 data-id="${task.id}"
-placeholder="Write response...">${task.facultyReply || ""}</textarea>
+${locked?"disabled":""}
+>${task.facultyReply || ""}</textarea>
 
-<label class="block text-sm mt-3 font-medium">
-Upload Response File
+<label class="text-sm mt-3 block font-medium">
+Upload File
 </label>
 
 <input
 type="file"
-class="replyFile border rounded p-2 w-full mt-1"
+class="replyFile border rounded p-2 w-full"
 data-id="${task.id}"
+${locked?"disabled":""}
 >
 
 <button
-class="saveReplyBtn bg-blue-600 text-white px-3 py-1 rounded mt-3"
-data-id="${task.id}">
-Save Response
+class="submitBtn bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded mt-3 w-full"
+data-id="${task.id}"
+${locked?"disabled":""}
+>
+
+Submit Task
+
 </button>
 
 ${task.facultyFile ? `
 <a href="${task.facultyFile}" download
 class="text-green-600 underline text-sm block mt-2">
-Download Uploaded Response
+Download Submitted File
 </a>
-` : ""}
+`:""}
 
 `;
 
@@ -190,39 +181,12 @@ attachEvents();
 }
 
 /************************************************
-⚡ TASK EVENTS
+EVENTS
 ************************************************/
 
 function attachEvents(){
 
-/* STATUS UPDATE */
-
-document.querySelectorAll(".statusSelect").forEach(select=>{
-
-select.addEventListener("change",(e)=>{
-
-const id = Number(e.target.dataset.id);
-
-const tasks = getTasks();
-
-const task = tasks.find(t=>t.id === id);
-
-if(task){
-
-task.status = e.target.value;
-task.updatedAt = new Date().toLocaleString();
-
-saveTasks(tasks);
-
-}
-
-});
-
-});
-
-/* SAVE RESPONSE */
-
-document.querySelectorAll(".saveReplyBtn").forEach(btn=>{
+document.querySelectorAll(".submitBtn").forEach(btn=>{
 
 btn.addEventListener("click",(e)=>{
 
@@ -230,45 +194,46 @@ const id = Number(e.target.dataset.id);
 
 const tasks = getTasks();
 
-const task = tasks.find(t=>t.id === id);
+const task = tasks.find(t=>t.id===id);
 
 if(!task) return;
 
-const replyBox = document.querySelector(
-`.replyBox[data-id="${id}"]`
-);
+const reply =
+document.querySelector(`.replyBox[data-id="${id}"]`);
 
-const fileInput = document.querySelector(
-`.replyFile[data-id="${id}"]`
-);
+const fileInput =
+document.querySelector(`.replyFile[data-id="${id}"]`);
 
-task.facultyReply = replyBox.value;
+if(!reply.value){
+alert("Write reply");
+return;
+}
 
 const file = fileInput.files[0];
 
-if(file){
+if(!file){
+alert("Upload response file");
+return;
+}
 
 const reader = new FileReader();
 
-reader.onload = function(){
+reader.onload=function(){
 
+task.facultyReply = reply.value;
 task.facultyFile = reader.result;
+task.status="Completed";
+task.locked=true;
 
 saveTasks(tasks);
+
+alert("Task submitted");
 
 loadFacultyTasks();
 
 };
 
 reader.readAsDataURL(file);
-
-}else{
-
-saveTasks(tasks);
-
-alert("Response saved");
-
-}
 
 });
 
@@ -277,7 +242,7 @@ alert("Response saved");
 }
 
 /************************************************
-🚪 LOGOUT
+LOGOUT
 ************************************************/
 
 document.getElementById("logoutBtn")
@@ -290,7 +255,7 @@ window.location.href="../index.html";
 });
 
 /************************************************
-🚀 INIT
+INIT
 ************************************************/
 
 loadFacultyTasks();

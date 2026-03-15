@@ -25,8 +25,7 @@ facultySelect.appendChild(option);
 
 });
 
-document
-.getElementById("assignTaskForm")
+document.getElementById("assignTaskForm")
 .addEventListener("submit",(e)=>{
 
 e.preventDefault();
@@ -34,16 +33,13 @@ e.preventDefault();
 const user = JSON.parse(localStorage.getItem("loggedInUser"));
 
 const faculty=facultySelect.value;
-
 const title=document.getElementById("taskTitle").value.trim();
 const desc=document.getElementById("taskDesc").value.trim();
 const deadline=document.getElementById("taskDeadline").value;
 
 if(!faculty || !title || !desc || !deadline){
-
 alert("Fill all fields");
 return;
-
 }
 
 const tasks=getTasks();
@@ -64,6 +60,8 @@ createdAt:new Date().toLocaleString()
 saveTasks(tasks);
 
 alert("Task assigned");
+
+document.getElementById("assignTaskForm").reset();
 
 });
 
